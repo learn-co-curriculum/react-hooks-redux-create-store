@@ -225,6 +225,6 @@ These are all implemented outside of our `createStore method`. What is generic t
 
   * That a call to `dispatch` should call a reducer, reassign the state, and render a change.
 
-This is implemented inside the createStore method.
+This is implemented inside the `createStore` method.
 
 <p class='util--hide'>View <a href='https://learn.co/lessons/redux-create-store'>Redux Create Store</a> on Learn.co and start learning to code for free.</p>
