@@ -171,11 +171,63 @@ Now we can get our code working by changing render to the following:
 ```javascript
 function render() {
   let container = document.getElementById('container');
-  container.textContent = store.getState.count;
+  container.textContent = store.getState().count;
+};
+```
+
+...and then updating our button event listener to use `store.dispatch`:
+
+```js
+let button = document.getElementById('button');
+
+button.addEventListener('click', function() {
+    store.dispatch({ type: 'INCREASE_COUNT' });
+})
+```
+
+All in all, with these changes, the code should look like the following:
+
+```js
+function createStore() {
+  let state;
+
+  function dispatch(action) {
+    state = changeCount(state, action);
+    render();
+  }
+
+  function getState() {
+    return state;
+  }
+
+  return {
+    dispatch,
+    getState
+  };
 };
 
-store = createStore();
+function changeCount(state = { count: 0 }, action) {
+  switch (action.type) {
+    case 'INCREASE_COUNT':
+      return { count: state.count + 1 };
+
+    default:
+      return state;
+  }
+};
+
+function render() {
+  let container = document.getElementById('container');
+  container.textContent = store.getState().count;
+};
+
+let store = createStore();
 store.dispatch({ type: '@@INIT' });
+let button = document.getElementById('button');
+
+button.addEventListener('click', function() {
+    store.dispatch({ type: 'INCREASE_COUNT' });
+})
 ```
 
 Our code is back to working. And it looks like we have a function called
@@ -232,8 +284,6 @@ function createStore(reducer) {
     return state;
   };
 
-  dispatch({ type: '@@INIT' });
-
   return {
     dispatch,
     getState
@@ -257,6 +307,7 @@ function render() {
 };
 
 let store = createStore(changeCount) // createStore takes the changeCount reducer as an argument
+store.dispatch({ type: '@@INIT' });
 let button = document.getElementById('button');
 
 button.addEventListener('click', function() {
@@ -267,73 +318,6 @@ button.addEventListener('click', function() {
 As you see above, `createStore` takes the reducer as the argument. This sets the
 new store's reducer as `changeCount`. When an action is dispatched, it calls the
 reducer that we passed through when creating the store.
-
-## Final Touches
-
-We've just got a final adjustment to make here. In this set up, when we're
-initially assigning `store` by invoking `createStore(changeCount)`, `dispatch({
-type: '@@INIT' })` will be called when the function runs. This only happens
-once, but it does cause an issue - `dispatch()` calls `render()`, which expects
-a `store` value to exist.. but we're in the process of defining `store` still.
-To fix this, we need to do two things.
-
-First, we declare the variable `store` _before_ we invoke
-`createStore(changeCount)`. It will be undefined, but that is fine.
-
-Second, we add a conditional statement into `dispatch()` so `render()` will only
-be called if `store` has some sort of value. The final code looks like this:
-
-```js
-let store, button;
-
-function createStore(reducer) {
-  let state;
-
-  function dispatch(action) {
-    state = reducer(state, action);
-    if (store) render()
-  }
-
-  function getState() {
-    return state;
-  };
-
-  dispatch({ type: '@@INIT' });
-
-  return {
-    dispatch,
-    getState
-  };
-};
-
-function changeCount(state = { count: 0 }, action) {
-  switch (action.type) {
-    case 'INCREASE_COUNT':
-      return { count: state.count + 1 };
-
-    default:
-      return state;
-  }
-}
-
-
-
-function render() {
-  let container = document.getElementById('container');
-  container.textContent = store.getState().count;
-};
-
-store = createStore(changeCount) // createStore takes the changeCount reducer as an argument
-button = document.getElementById('button');
-
-button.addEventListener('click', function() {
-  store.dispatch({ type: 'INCREASE_COUNT' });
-});
-
-```
-
-This code is also in the `reducer.js`. Feel free to open `index.html` and give
-it a try!
 
 ## Summary
 
