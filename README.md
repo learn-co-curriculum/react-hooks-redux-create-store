@@ -139,12 +139,10 @@ let store = createStore();
 store.dispatch({ type: '@@INIT' });
 ```
 
-So we have this object called a store which stores all of our application's
+So we have this object called a store which contains of our application's
 state. Right now we can dispatch actions that modify that state, but we need
 some way to retrieve data from the store. To do this, our store should respond
-to one other method, which is `getState`. This method simply returns the state.
-It's our mechanism to allow the rest of the application to read the state, but
-still only change the state by calling `dispatch`.
+to one other method, `getState`. This method simply returns the state, which we can use elsewhere in our application.
 
 ```javascript
 function createStore() {
@@ -265,9 +263,7 @@ function changeCount(state = { count: 0 }, action) {
 We happen to have an application that increases a count. But we can imagine
 applications that manage people's songs, their GitHub repositories, or their
 contacts. So we want our `dispatch` method to call a reducer every time an
-action is dispatched. However, we don't want the `createStore` function, which
-we want to be generic enough for any JavaScript application, to specify what
-that reducer is, or what it does. Instead, we should make the reducer an
+action is dispatched. However, we don't want the `createStore` function to specify what that reducer is, or what it does. We want `createStore` to be generic enough for _any_ JavaScript application. Instead, we should make the reducer an
 argument to our `createStore` function. Then we pass through our reducer
 function when invoking the `createStore` method.
 
