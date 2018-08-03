@@ -45,9 +45,9 @@ button.addEventListener('click', function() {
 })
 ```
 
-See that variable state all the way at the top of our code? Remember, that
-variable holds a representation of all of our data we need to display. So it's
-not very good if this variable is global, and we can accidentally overwrite
+See that `state` variable state all the way at the top of our code? Remember,
+that variable holds a representation of all of our data we need to display. So
+it's not very good if this variable is global, and we can accidentally overwrite
 simply by writing ` state = 'bad news bears'` somewhere else in our codebase.
 Goodbye state.
 
