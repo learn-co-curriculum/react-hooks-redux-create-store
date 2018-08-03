@@ -247,7 +247,7 @@ function dispatch(action) {
 ```
 
 Notice, however, that we did not move the `changeCount` reducer into the
-createStore function. Take a look at it. This code is particular to our
+`createStore` function. Take a look at it. This code is particular to our
 application.
 
 ```javascript
@@ -269,7 +269,7 @@ action is dispatched. However, we don't want the `createStore` function, which
 we want to be generic enough for any JavaScript application, to specify what
 that reducer is, or what it does. Instead, we should make the reducer an
 argument to our `createStore` function. Then we pass through our reducer
-function when invoking the createStore method.
+function when invoking the `createStore` method.
 
 ```javascript
 function createStore(reducer) {
