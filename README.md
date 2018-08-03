@@ -113,7 +113,7 @@ As you see above, `dispatch` is now private to our new function. But we'll need
 to call the function when certain events happen in our application (eg. when a
 user clicks on a button, call dispatch). So we expose the method by having our
 function return a JavaScript object that has a `dispatch` method. We'll call
-this returned JavaScript object our **store**, and therefore we'll call the
+this returned JavaScript object our **store**, and, therefore, we'll call the
 method `createStore`, because that's what it does.
 
 ```javascript
