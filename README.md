@@ -17,7 +17,7 @@ Let's look at the code that we wrote in the last section.
 ```javascript
 let state;
 
-function changeCount(state = { count: 0 }, action) {
+function reducer(state = { count: 0 }, action) {
   switch (action.type) {
     case 'INCREASE_COUNT':
       return { count: state.count + 1 };
@@ -28,7 +28,7 @@ function changeCount(state = { count: 0 }, action) {
 };
 
 function dispatch(action){
-  state = changeCount(state, action);
+  state = reducer(state, action);
   render();
 };
 
@@ -48,7 +48,7 @@ button.addEventListener('click', function() {
 See that `state` variable state all the way at the top of our code? Remember,
 that variable holds a representation of all of our data we need to display. So
 it's not very good if this variable is global, and we can accidentally overwrite
-simply by writing ` state = 'bad news bears'` somewhere else in our codebase.
+simply by writing `state = 'bad news bears'` somewhere else in our codebase.
 Goodbye state.
 
 We can solve this by wrapping our state in a function.
@@ -60,7 +60,7 @@ function() {
 // ...
 
 function dispatch(action) {
-  state = changeCount(state, action);
+  state = reducer(state, action);
   render();
 };
 
@@ -90,14 +90,13 @@ call `dispatch` with an action, and it calls our reducer and returns to us a new
 state. So we move dispatch inside of our new method that now both encapsulates
 the state and holds `dispatch`.
 
-
 ```javascript
 function() {
   let state;
   // state is now accessible to dispatch
 
   function dispatch(action) {
-    state = changeCount(state, action);
+    state = reducer(state, action);
     render();
   }
 }
@@ -121,7 +120,7 @@ function createStore() {
   let state;
 
   function dispatch(action) {
-    state = changeCount(state, action);
+    state = reducer(state, action);
     render();
   };
 
@@ -149,7 +148,7 @@ function createStore() {
   let state;
 
   function dispatch(action) {
-    state = changeCount(state, action);
+    state = reducer(state, action);
     render();
   }
 
@@ -190,7 +189,7 @@ function createStore() {
   let state;
 
   function dispatch(action) {
-    state = changeCount(state, action);
+    state = reducer(state, action);
     render();
   }
 
@@ -204,7 +203,7 @@ function createStore() {
   };
 };
 
-function changeCount(state = { count: 0 }, action) {
+function reducer(state = { count: 0 }, action) {
   switch (action.type) {
     case 'INCREASE_COUNT':
       return { count: state.count + 1 };
@@ -239,17 +238,17 @@ that.
 
 ```javascript
 function dispatch(action) {
-  state = changeCount(state, action);
+  state = reducer(state, action);
   render();
 };
 ```
 
-Notice, however, that we did not move the `changeCount` reducer into the
+Notice, however, that we did not move the `reducer` reducer into the
 `createStore` function. Take a look at it. This code is particular to our
 application.
 
 ```javascript
-function changeCount(state = { count: 0 }, action) {
+function reducer(state = { count: 0 }, action) {
   switch (action.type) {
     case 'INCREASE_COUNT':
       return { count: state.count + 1 };
@@ -286,7 +285,7 @@ function createStore(reducer) {
   };
 };
 
-function changeCount(state = { count: 0 }, action) {
+function reducer(state = { count: 0 }, action) {
   switch (action.type) {
     case 'INCREASE_COUNT':
       return { count: state.count + 1 };
@@ -302,7 +301,7 @@ function render() {
   container.textContent = store.getState().count;
 };
 
-let store = createStore(changeCount) // createStore takes the changeCount reducer as an argument
+let store = createStore(reducer) // createStore takes the reducer reducer as an argument
 store.dispatch({ type: '@@INIT' });
 let button = document.getElementById('button');
 
@@ -312,7 +311,7 @@ button.addEventListener('click', function() {
 ```
 
 As you see above, `createStore` takes the reducer as the argument. This sets the
-new store's reducer as `changeCount`. When an action is dispatched, it calls the
+new store's reducer as `reducer`. When an action is dispatched, it calls the
 reducer that we passed through when creating the store.
 
 ## Summary
@@ -327,14 +326,14 @@ particular to our application is outside that function.
 
 What's particular to a specific application?
 
-  * How the DOM is updated in our `render` function
-  * What events trigger a dispatch method
-  * How our state should change in response to different actions being dispatched.  
+* How the DOM is updated in our `render` function
+* What events trigger a dispatch method
+* How our state should change in response to different actions being dispatched.  
 
 These are all implemented outside of our `createStore method`. What is generic
 to each application following this pattern?
 
-  * That a call to `dispatch` should call a reducer, reassign the state, and render a change.
+* That a call to `dispatch` should call a reducer, reassign the state, and render a change.
 
 This is implemented inside the `createStore` method.
 
