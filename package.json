@@ -1,0 +1,23 @@
+{
+  "name": "redux-create-store",
+  "version": "1.0.0",
+  "description": "A code-along on building a createStore",
+  "main": "js/reducer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "open index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/learn-co-curriculum/redux-create-store.git"
+  },
+  "keywords": [
+    "redux"
+  ],
+  "author": "flatironschool",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/learn-co-curriculum/redux-create-store/issues"
+  },
+  "homepage": "https://github.com/learn-co-curriculum/redux-create-store#readme"
+}
