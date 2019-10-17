@@ -10,6 +10,8 @@ to:
 * Understand how to encapsulate the functions we built.
 * Learn about the `getState` method and how it works.
 
+Use `js/reducer.js` to follow along. Open `index.html` to try out the code.
+
 ## Encapsulate our application's state by wrapping our code in a function
 
 Let's look at the code that we wrote in the last section.
@@ -40,7 +42,7 @@ function render() {
 dispatch({ type: '@@INIT' })
 let button = document.getElementById('button');
 
-button.addEventListener('click', function() {
+button.addEventListener('click', () => {
     dispatch({ type: 'INCREASE_COUNT' });
 })
 ```
@@ -77,7 +79,7 @@ this point, we're tempted to move everything inside of our new function. Let's
 try to figure out exactly what we should move inside the function in the next
 section.
 
-## Move code common to every JavaScript application inside our new function
+## Move Code Common to Every JavaScript Application Inside Our New Function
 
 We ultimately want our new function to become a function that all of our
 applications following the __Redux__ pattern can use. To decide what our new
@@ -138,10 +140,11 @@ let store = createStore();
 store.dispatch({ type: '@@INIT' });
 ```
 
-So we have this object called a store which contains of our application's
+So we have this object called a store which contains all of our application's
 state. Right now we can dispatch actions that modify that state, but we need
 some way to retrieve data from the store. To do this, our store should respond
-to one other method, `getState`. This method simply returns the state, which we can use elsewhere in our application.
+to one other method, `getState`. This method simply returns the state, which we
+can use elsewhere in our application.
 
 ```javascript
 function createStore() {
@@ -177,7 +180,7 @@ function render() {
 ```js
 let button = document.getElementById('button');
 
-button.addEventListener('click', function() {
+button.addEventListener('click', () => {
     store.dispatch({ type: 'INCREASE_COUNT' });
 })
 ```
@@ -222,7 +225,7 @@ let store = createStore();
 store.dispatch({ type: '@@INIT' });
 let button = document.getElementById('button');
 
-button.addEventListener('click', function() {
+button.addEventListener('click', () => {
     store.dispatch({ type: 'INCREASE_COUNT' });
 })
 ```
@@ -243,8 +246,8 @@ function dispatch(action) {
 };
 ```
 
-Notice, however, that we did not move the `reducer` reducer into the
-`createStore` function. Take a look at it. This code is particular to our
+Notice, however, that we did not move the `reducer` function into the
+`createStore` function. Take a look at it. _This code_ is particular to our
 application.
 
 ```javascript
@@ -262,9 +265,11 @@ function reducer(state = { count: 0 }, action) {
 We happen to have an application that increases a count. But we can imagine
 applications that manage people's songs, their GitHub repositories, or their
 contacts. So we want our `dispatch` method to call a reducer every time an
-action is dispatched. However, we don't want the `createStore` function to specify what that reducer is, or what it does. We want `createStore` to be generic enough for _any_ JavaScript application. Instead, we should make the reducer an
-argument to our `createStore` function. Then we pass through our reducer
-function when invoking the `createStore` method.
+action is dispatched. However, we don't want the `createStore` function to
+specify what that reducer is, or what it does. We want `createStore` to be
+generic enough for _any_ JavaScript application. Instead, we should make the
+reducer an argument to our `createStore` function. Then we pass through our
+reducer function when invoking the `createStore` method.
 
 ```javascript
 function createStore(reducer) {
@@ -305,7 +310,7 @@ let store = createStore(reducer) // createStore takes the reducer reducer as an 
 store.dispatch({ type: '@@INIT' });
 let button = document.getElementById('button');
 
-button.addEventListener('click', function() {
+button.addEventListener('click', () => {
   store.dispatch({ type: 'INCREASE_COUNT' });
 });
 ```
