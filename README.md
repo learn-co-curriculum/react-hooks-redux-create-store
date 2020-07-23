@@ -10,7 +10,7 @@ to:
 * Understand how to encapsulate the functions we built.
 * Learn about the `getState` method and how it works.
 
-Use `js/createStore.js.js` to follow along. Open `index.html` to try out the code.
+Use `js/createStore.js` to follow along. Open `index.html` to try out the code.
 
 ## Encapsulate our application's state by wrapping our code in a function
 
@@ -47,16 +47,17 @@ button.addEventListener('click', () => {
 })
 ```
 
-See that `state` variable state all the way at the top of our code? Remember,
+See that `state` variable all the way at the top of our code? Remember,
 that variable holds a representation of all of our data we need to display. So
 it's not very good if this variable is global, and we can accidentally overwrite
 simply by writing `state = 'bad news bears'` somewhere else in our codebase.
 Goodbye state.
 
-We can solve this by wrapping our state in a function.
+We can solve this by wrapping our state in a function. (We will discuss a bit
+later why we have named this function `createStore`.)
 
 ```javascript
-function() {
+function createStore() {
   let state;
 }
 // ...
@@ -72,11 +73,13 @@ function render() {
 };
 ```
 
-Now if we dispatch our initial action by calling `dispatch({ type: '@@INIT' })`
-our code breaks because the `dispatch` function does not have access to that
-declared state. Notice that `render` won't have access to our state either. At
-this point, we're tempted to move everything inside of our new function. Let's
-try to figure out exactly what we should move inside the function in the next
+Now if you reload the browser, you'll see an error pointing to where we are 
+dispatching our initial action; this is because the `dispatch` function does 
+not have access to that declared state. Notice that `render` won't have 
+access to our state either. At this point, we might be tempted to move 
+everything inside of our new function. However, the goal here is to include 
+only the code that would be common to all JavaScript applications inside the 
+function. We'll try to figure out exactly what we should move in the next 
 section.
 
 ## Move Code Common to Every JavaScript Application Inside Our New Function
@@ -89,11 +92,10 @@ function should be able to do, let's go back to our __Redux__ fundamentals.
 
 The function that goes through this flow for us is the `dispatch` function. We
 call `dispatch` with an action, and it calls our reducer and returns to us a new
-state. So we move dispatch inside of our new method that now both encapsulates
-the state and holds `dispatch`.
+state. So let's move dispatch inside of our new method.
 
 ```javascript
-function() {
+function createStore() {
   let state;
   // state is now accessible to dispatch
 
@@ -111,11 +113,11 @@ function encloses or draws a protective bubble around the variables in its scope
 and carries those with it when invoked later.
 
 As you see above, `dispatch` is now private to our new function. But we'll need
-to call the function when certain events happen in our application (eg. when a
-user clicks on a button, call dispatch). So we expose the method by having our
-function return a JavaScript object that has a `dispatch` method. We'll call
-this returned JavaScript object our **store**, and, therefore, we'll call the
-method `createStore`, because that's what it does.
+to call the function when certain events happen in our application (eg. we might
+want to call dispatch when a user clicks on a button). So we expose the method by 
+having our function return a JavaScript object containing the `dispatch` method. 
+In __Redux__ terms, this returned JavaScript object is called the **store**, so 
+we've named the method `createStore` because that's what it does.
 
 ```javascript
 function createStore() {
@@ -130,10 +132,11 @@ function createStore() {
 };
 ```
 
-This code almost works. Call `createStore`, and set the returned store equal to
-a variable. Then change our remaining code to make sure we are properly
-referencing the `dispatch` method. We can use the almost-working code in the
-following manner.
+Now, in order to access the `dispatch` method, we will create a variable `store`
+and set it equal to the result of calling `createStore`. Because `createStore` 
+returns an object that contains the `dispatch` method, we can now access the 
+method from `store`. Let's modify the code where we dispatch the initial action 
+as follows: 
 
 ```javascript
 let store = createStore();
@@ -143,8 +146,9 @@ store.dispatch({ type: '@@INIT' });
 So we have this object called a store which contains all of our application's
 state. Right now we can dispatch actions that modify that state, but we need
 some way to retrieve data from the store. To do this, our store should respond
-to one other method, `getState`. This method simply returns the state, which we
-can use elsewhere in our application.
+to one other method, `getState`. This method simply returns the state so we
+can use it elsewhere in our application. We will also need to add the `getState` 
+method to the store.
 
 ```javascript
 function createStore() {
@@ -306,7 +310,7 @@ function render() {
   container.textContent = store.getState().count;
 };
 
-let store = createStore(reducer) // createStore takes the reducer reducer as an argument
+let store = createStore(reducer) // createStore takes the reducer as an argument
 store.dispatch({ type: '@@INIT' });
 let button = document.getElementById('button');
 
