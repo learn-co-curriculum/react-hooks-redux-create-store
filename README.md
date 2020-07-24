@@ -143,12 +143,12 @@ let store = createStore();
 store.dispatch({ type: '@@INIT' });
 ```
 
-So we have this object called a store which contains all of our application's
+So now we have this object called a store which contains all of our application's
 state. Right now we can dispatch actions that modify that state, but we need
 some way to retrieve data from the store. To do this, our store should respond
 to one other method, `getState`. This method simply returns the state so we
-can use it elsewhere in our application. We will also need to add the `getState` 
-method to the store.
+can use it elsewhere in our application. We will also need to add `getState` 
+to the object our `createStore` function returns.
 
 ```javascript
 function createStore() {
@@ -170,7 +170,7 @@ function createStore() {
 };
 ```
 
-Now we can get our code working by changing render to the following:
+Now we can get our code working by changing `render` to the following:
 
 ```javascript
 function render() {
@@ -339,11 +339,9 @@ What's particular to a specific application?
 * What events trigger a dispatch method
 * How our state should change in response to different actions being dispatched.  
 
-These are all implemented outside of our `createStore method`. What is generic
+These are all implemented outside of our `createStore` function. What is generic
 to each application following this pattern?
 
 * That a call to `dispatch` should call a reducer, reassign the state, and render a change.
 
-This is implemented inside the `createStore` method.
-
-<p class='util--hide'>View <a href='https://learn.co/lessons/redux-create-store'>Redux Create Store</a> on Learn.co and start learning to code for free.</p>
+This is implemented inside the `createStore` function.
