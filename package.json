@@ -1,8 +1,8 @@
 {
-  "name": "redux-create-store",
+  "name": "react-hooks-redux-create-store",
   "version": "1.0.0",
   "description": "A code-along on building a createStore",
-  "main": "js/reducer.js",
+  "main": "src/reducer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "open index.html"
