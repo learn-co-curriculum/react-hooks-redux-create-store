@@ -1,16 +1,16 @@
 # Refactoring Our Code Into A Library
 
-## Objectives
+## Learning Goals
+
+- Understand which part of our codebase can be used across applications
+- Understand how to encapsulate the functions we built
+- Use the `getState` method
+
+## Introduction
 
 In this lesson, we will learn how to turn our code into a library that can be
-used across JavaScript applications. By the end of the lesson you will be able
-to:
-
-- Understand which part of our codebase can be used across applications.
-- Understand how to encapsulate the functions we built.
-- Learn about the `getState` method and how it works.
-
-Use `src/createStore.js` to follow along. Open `index.html` to try out the code.
+used across JavaScript applications. Use `src/createStore.js` to follow along. 
+Open `index.html` to try out the code.
 
 ## Encapsulate our application's state by wrapping our code in a function
 
