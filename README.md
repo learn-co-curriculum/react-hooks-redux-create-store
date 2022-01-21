@@ -9,10 +9,10 @@
 ## Introduction
 
 In this lesson, we will learn how to turn our code into a library that can be
-used across JavaScript applications. Use `src/createStore.js` to follow along. 
+used across JavaScript applications. Use `src/createStore.js` to follow along.
 Open `index.html` to try out the code.
 
-## Encapsulate our application's state by wrapping our code in a function
+## Write a `createStore` Function
 
 Let's look at the code that we wrote in the last section.
 
@@ -47,9 +47,9 @@ button.addEventListener("click", () => {
 });
 ```
 
-See that `state` variable all the way at the top of our code? Remember,
-that variable holds a representation of all of our data we need to display. So
-it's not very good if this variable is global, and we can accidentally overwrite
+See that `state` variable all the way at the top of our code? Remember, that
+variable holds a representation of all of our data we need to display. So it's
+not very good if this variable is global, and we can accidentally overwrite
 simply by writing `state = 'bad news bears'` somewhere else in our codebase.
 Goodbye state.
 
@@ -81,11 +81,11 @@ of our new function. However, the goal here is to include only the code that
 would be common to all JavaScript applications inside the function. We'll try to
 figure out exactly what we should move in the next section.
 
-## Move Code Common to Every JavaScript Application Inside Our New Function
+## Use Function Scope to Encapsulate State
 
 We ultimately want our new function to become a function that all of our
-applications following the **Redux** pattern can use. To decide what our new
-function should be able to do, let's go back to our **Redux** fundamentals.
+applications following the Redux pattern can use. To decide what our new
+function should be able to do, let's go back to our Redux fundamentals.
 
 `Action -> Reducer -> New State.`
 
@@ -108,15 +108,15 @@ function createStore() {
 > Note: You may notice that in the above code we made a _closure_. As you surely
 > remember a JavaScript function has access to all the variables that were in
 > scope at the time of its definition. This feature is called a closure since a
-> function encloses or draws a protective bubble around the variables in its scope
-> and carries those with it when invoked later.
+> function encloses or draws a protective bubble around the variables in its
+> scope and carries those with it when invoked later.
 
 As you see above, `dispatch` is now private to our new function. But we'll need
 to call the function when certain events happen in our application (eg. we might
-want to call dispatch when a user clicks on a button). So we expose the method by
-having our function return a JavaScript object containing the `dispatch` method.
-In **Redux** terms, this returned JavaScript object is called the **store**, so
-we've named the method `createStore` because that's what it does.
+want to call dispatch when a user clicks on a button). So we expose the method
+by having our function return a JavaScript object containing the `dispatch`
+method. In Redux terms, this returned JavaScript object is called the **store**,
+so we've named the method `createStore` because that's what it does.
 
 ```javascript
 function createStore() {
@@ -131,8 +131,8 @@ function createStore() {
 }
 ```
 
-Now, in order to access the `dispatch` method, we will create a variable `store`
-and set it equal to the result of calling `createStore`. Because `createStore`
+In order to access the `dispatch` method, we will create a variable `store` and
+set it equal to the result of calling `createStore`. Because `createStore`
 returns an object that contains the `dispatch` method, we can now access the
 method from `store`. Let's modify the code where we dispatch the initial action
 as follows:
@@ -236,11 +236,10 @@ button.addEventListener("click", () => {
 Our code is back to working. And it looks like we have a function called
 `createStore` which can work with any JavaScript application... almost.
 
-## Abstract away the reducer
+## Abstract Away the Reducer
 
-We know that **Redux** works by having an action dispatched, which calls a
-reducer, and then renders the view. Our `createStore`'s dispatch method does
-that.
+We know that Redux works by having an action dispatched, which calls a reducer,
+and then renders the view. Our `createStore`'s dispatch method does that.
 
 ```javascript
 function dispatch(action) {
@@ -321,9 +320,9 @@ As you see above, `createStore` takes the reducer as the argument. This sets the
 new store's reducer as `reducer`. When an action is dispatched, it calls the
 reducer that we passed through when creating the store.
 
-## Summary
+## Conclusion
 
-With this set up, we've got a fully functional `store`, that encapsulates our
+With this set up, we've got a fully functional `store` that encapsulates our
 state and provides a controlled way to write (`dispatch`) and retrieve
 (`getState`) information.
 
@@ -340,6 +339,7 @@ What's particular to a specific application?
 These are all implemented outside of our `createStore` function. What is generic
 to each application following this pattern?
 
-- That a call to `dispatch` should call a reducer, reassign the state, and render a change.
+- That a call to `dispatch` should call a reducer, reassign the state, and
+  render a change.
 
 This is implemented inside the `createStore` function.
